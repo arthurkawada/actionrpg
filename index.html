@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/user/Downloads/rpg_mobile_v4.html -->
+<!-- saved from url=(0052)file:///C:/Users/user/Downloads/rpg_mobile_v4_2.html -->
 <html lang="pt-br"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -62,36 +62,41 @@
   /* botão especial */
   #special-btn {
     width: 54px; height: 54px; border-radius: 50%;
-    background: rgba(80,80,80,0.2);
+    background: transparent;
     border: 3px solid rgba(100,100,100,0.35);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-size: 20px; color: rgba(150,150,150,0.5);
     cursor: pointer; flex-shrink: 0;
-    transition: background 0.15s, border-color 0.15s, transform 0.08s;
+    transition: border-color 0.15s, color 0.15s, transform 0.08s, box-shadow 0.15s;
     position: relative; overflow: hidden;
   }
+  /* preenchimento de baixo pra cima */
+  #special-fill {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 0%;
+    transition: height 0.1s, background 0.2s;
+    border-radius: 0 0 50px 50px;
+    background: rgba(255,200,50,0.25);
+    pointer-events: none;
+    z-index: 0;
+  }
+  #special-fill.mage { background: rgba(140,60,255,0.25); }
+  #special-fill.full-warrior { background: rgba(255,200,50,0.4); border-radius: 50%; }
+  #special-fill.full-mage    { background: rgba(140,60,255,0.4);  border-radius: 50%; }
+  #special-btn > * { position: relative; z-index: 1; }
   #special-btn.ready-warrior {
-    background: rgba(255,180,0,0.2);
-    border-color: rgba(255,200,50,0.8);
-    color: rgba(255,220,80,0.95);
-    box-shadow: 0 0 12px rgba(255,180,0,0.35);
+    border-color: rgba(255,200,50,0.9);
+    color: rgba(255,220,80,1);
+    box-shadow: 0 0 14px rgba(255,180,0,0.5);
   }
   #special-btn.ready-mage {
-    background: rgba(140,60,255,0.2);
-    border-color: rgba(160,80,255,0.8);
-    color: rgba(180,120,255,0.95);
-    box-shadow: 0 0 12px rgba(140,60,255,0.35);
+    border-color: rgba(160,80,255,0.9);
+    color: rgba(180,120,255,1);
+    box-shadow: 0 0 14px rgba(140,60,255,0.5);
   }
   #special-btn:active { transform: scale(0.92); }
-  #special-charge {
-    position: absolute; bottom: 0; left: 0; height: 3px;
-    background: rgba(255,200,50,0.7); width: 0%;
-    transition: width 0.1s; border-radius: 0 0 50px 50px;
-  }
-  #special-charge.mage { background: rgba(160,80,255,0.7); }
   .spec-label { font-size: 7px; letter-spacing: 0.5px; color: rgba(150,150,150,0.5); margin-top: 1px; }
-  #special-btn.ready-warrior .spec-label { color: rgba(255,200,50,0.8); }
-  #special-btn.ready-mage .spec-label { color: rgba(160,80,255,0.8); }
+  #special-btn.ready-warrior .spec-label { color: rgba(255,220,80,0.9); }
+  #special-btn.ready-mage   .spec-label { color: rgba(180,120,255,0.9); }
 
   /* HUD stats acima do canvas */
   #hud {
@@ -265,6 +270,66 @@
   .name-skip { font-size: 10px; color: #444; cursor: pointer; letter-spacing: 1px; }
   .name-skip:active { color: #888; }
   .name-sending { font-size: 11px; color: #888; }
+
+  /* ── TELA DE CONFIGURAÇÕES ── */
+  #config-screen {
+    position: fixed; inset: 0; z-index: 150;
+    background: #08080f;
+    display: flex; flex-direction: column;
+    align-items: center;
+    font-family: monospace;
+    overflow-y: auto;
+    padding: 16px 0 24px;
+  }
+  #config-screen.hidden { display: none; }
+  .cfg-title {
+    font-size: 14px; font-weight: bold; color: #ffd700;
+    letter-spacing: 3px; margin-bottom: 4px;
+  }
+  .cfg-subtitle { font-size: 9px; color: #444; letter-spacing: 2px; margin-bottom: 16px; }
+  .cfg-section {
+    width: 100%; max-width: 320px;
+    margin-bottom: 10px; padding: 0 16px;
+  }
+  .cfg-section-title {
+    font-size: 9px; color: #666; letter-spacing: 2px;
+    text-transform: uppercase; border-bottom: 1px solid #1a1a2a;
+    padding-bottom: 4px; margin-bottom: 8px;
+  }
+  .cfg-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px; gap: 8px;
+  }
+  .cfg-label { font-size: 10px; color: #aaa; flex: 1; line-height: 1.3; }
+  .cfg-val { font-size: 10px; color: #ffd700; width: 32px; text-align: right; flex-shrink: 0; }
+  .cfg-slider {
+    -webkit-appearance: none; appearance: none;
+    width: 110px; height: 3px; flex-shrink: 0;
+    background: #222; border-radius: 2px; outline: none;
+  }
+  .cfg-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #ffd700; cursor: pointer;
+    box-shadow: 0 0 6px rgba(255,215,0,0.4);
+  }
+  .cfg-btn-row {
+    display: flex; gap: 10px; margin-top: 14px;
+    width: 100%; max-width: 320px; padding: 0 16px;
+  }
+  .cfg-btn {
+    flex: 1; height: 40px; border-radius: 20px;
+    border: none; font-family: monospace; font-size: 12px;
+    font-weight: bold; letter-spacing: 1px; cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .cfg-btn:active { transform: scale(0.95); }
+  .cfg-btn-reset { background: rgba(255,255,255,0.06); color: #888; border: 1px solid #333; }
+  .cfg-btn-close { background: linear-gradient(135deg, #b8860b, #ffd700); color: #000; }
+  #title-hit-zone {
+    position: absolute; top: 0; left: 0; right: 0; height: 52px;
+    cursor: pointer; z-index: 5;
+  }
 </style>
 </head>
 <body>
@@ -283,8 +348,159 @@
   <div class="name-sending hidden" id="name-sending">Salvando...</div>
 </div>
 
+<!-- ── TELA DE CONFIGURAÇÕES ── -->
+<div id="config-screen" class="hidden">
+  <div class="cfg-title">⚙️ CONFIGURAÇÕES</div>
+  <div class="cfg-subtitle">PARÂMETROS DO JOGO</div>
+
+  <div class="cfg-section">
+    <div class="cfg-section-title">🌊 Ondas</div>
+    <div class="cfg-row">
+      <div class="cfg-label">Tempo entre ondas (s)</div>
+      <input class="cfg-slider" type="range" id="cfg-wave-time" min="5" max="60" step="1" value="15" oninput="cfgSync(this,&#39;cfg-wave-time-val&#39;)">
+      <div class="cfg-val" id="cfg-wave-time-val">15</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">HP inicial inimigo</div>
+      <input class="cfg-slider" type="range" id="cfg-enemy-hp" min="1" max="20" step="1" value="2" oninput="cfgSync(this,&#39;cfg-enemy-hp-val&#39;)">
+      <div class="cfg-val" id="cfg-enemy-hp-val">2</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">HP ganho por onda</div>
+      <input class="cfg-slider" type="range" id="cfg-hp-per-wave" min="0" max="10" step="1" value="1" oninput="cfgSync(this,&#39;cfg-hp-per-wave-val&#39;)">
+      <div class="cfg-val" id="cfg-hp-per-wave-val">1</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">HP máx inimigo (cap)</div>
+      <input class="cfg-slider" type="range" id="cfg-hp-cap" min="2" max="50" step="1" value="8" oninput="cfgSync(this,&#39;cfg-hp-cap-val&#39;)">
+      <div class="cfg-val" id="cfg-hp-cap-val">8</div>
+    </div>
+  </div>
+
+  <div class="cfg-section">
+    <div class="cfg-section-title">⚔️ Guerreiro</div>
+    <div class="cfg-row">
+      <div class="cfg-label">HP do guerreiro</div>
+      <input class="cfg-slider" type="range" id="cfg-warrior-hp" min="10" max="200" step="5" value="50" oninput="cfgSync(this,&#39;cfg-warrior-hp-val&#39;)">
+      <div class="cfg-val" id="cfg-warrior-hp-val">50</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Dano do slash</div>
+      <input class="cfg-slider" type="range" id="cfg-warrior-dmg" min="1" max="20" step="1" value="2" oninput="cfgSync(this,&#39;cfg-warrior-dmg-val&#39;)">
+      <div class="cfg-val" id="cfg-warrior-dmg-val">2</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Dano do especial</div>
+      <input class="cfg-slider" type="range" id="cfg-warrior-spec-dmg" min="10" max="500" step="10" value="100" oninput="cfgSync(this,&#39;cfg-warrior-spec-dmg-val&#39;)">
+      <div class="cfg-val" id="cfg-warrior-spec-dmg-val">100</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Raio do especial (px)</div>
+      <input class="cfg-slider" type="range" id="cfg-warrior-spec-r" min="10" max="80" step="2" value="26" oninput="cfgSync(this,&#39;cfg-warrior-spec-r-val&#39;)">
+      <div class="cfg-val" id="cfg-warrior-spec-r-val">26</div>
+    </div>
+  </div>
+
+  <div class="cfg-section">
+    <div class="cfg-section-title">🔮 Mago</div>
+    <div class="cfg-row">
+      <div class="cfg-label">HP do mago</div>
+      <input class="cfg-slider" type="range" id="cfg-mage-hp" min="10" max="200" step="5" value="25" oninput="cfgSync(this,&#39;cfg-mage-hp-val&#39;)">
+      <div class="cfg-val" id="cfg-mage-hp-val">25</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Dano da bola de fogo</div>
+      <input class="cfg-slider" type="range" id="cfg-mage-dmg" min="1" max="20" step="1" value="5" oninput="cfgSync(this,&#39;cfg-mage-dmg-val&#39;)">
+      <div class="cfg-val" id="cfg-mage-dmg-val">5</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Duração dos orbes (s)</div>
+      <input class="cfg-slider" type="range" id="cfg-orb-life" min="3" max="30" step="1" value="10" oninput="cfgSync(this,&#39;cfg-orb-life-val&#39;)">
+      <div class="cfg-val" id="cfg-orb-life-val">10</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Cooldown orbe p/ inimigo (s)</div>
+      <input class="cfg-slider" type="range" id="cfg-orb-cd" min="0.1" max="3" step="0.1" value="0.5" oninput="cfgSync(this,&#39;cfg-orb-cd-val&#39;)">
+      <div class="cfg-val" id="cfg-orb-cd-val">0.5</div>
+    </div>
+  </div>
+
+  <div class="cfg-section">
+    <div class="cfg-section-title">👾 Inimigos</div>
+    <div class="cfg-row">
+      <div class="cfg-label">Dano guerreiro inimigo</div>
+      <input class="cfg-slider" type="range" id="cfg-ew-dmg" min="1" max="20" step="1" value="1" oninput="cfgSync(this,&#39;cfg-ew-dmg-val&#39;)">
+      <div class="cfg-val" id="cfg-ew-dmg-val">1</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Dano arqueiro inimigo</div>
+      <input class="cfg-slider" type="range" id="cfg-ea-dmg" min="1" max="20" step="1" value="1" oninput="cfgSync(this,&#39;cfg-ea-dmg-val&#39;)">
+      <div class="cfg-val" id="cfg-ea-dmg-val">1</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Dano mago inimigo</div>
+      <input class="cfg-slider" type="range" id="cfg-em-dmg" min="1" max="20" step="1" value="2" oninput="cfgSync(this,&#39;cfg-em-dmg-val&#39;)">
+      <div class="cfg-val" id="cfg-em-dmg-val">2</div>
+    </div>
+    <div class="cfg-row">
+      <div class="cfg-label">Carga p/ ativar especial</div>
+      <input class="cfg-slider" type="range" id="cfg-spec-charge" min="10" max="300" step="10" value="100" oninput="cfgSync(this,&#39;cfg-spec-charge-val&#39;)">
+      <div class="cfg-val" id="cfg-spec-charge-val">100</div>
+    </div>
+  </div>
+
+  <div class="cfg-btn-row">
+    <button class="cfg-btn cfg-btn-reset" onclick="cfgReset()">↺ Padrão</button>
+    <button class="cfg-btn cfg-btn-close" onclick="closeConfig()">✔ Salvar e fechar</button>
+  </div>
+</div>
+
+<!-- ── TELA DE CONFIGURAÇÕES ── -->
+<div id="config-screen" class="hidden">
+  <div class="cfg-title">⚙️ CONFIGURAÇÕES</div>
+  <div class="cfg-subtitle">PARÂMETROS DO JOGO</div>
+
+  <div class="cfg-section">
+    <div class="cfg-section-title">🌊 Ondas</div>
+    <div class="cfg-row"><div class="cfg-label">Tempo entre ondas (s)</div><input class="cfg-slider" type="range" id="cfg-wave-time" min="5" max="60" step="1" value="15" oninput="cfgSync(this,&#39;cfg-wave-time-val&#39;)"><div class="cfg-val" id="cfg-wave-time-val">15</div></div>
+    <div class="cfg-row"><div class="cfg-label">HP inicial inimigo</div><input class="cfg-slider" type="range" id="cfg-enemy-hp" min="1" max="20" step="1" value="2" oninput="cfgSync(this,&#39;cfg-enemy-hp-val&#39;)"><div class="cfg-val" id="cfg-enemy-hp-val">2</div></div>
+    <div class="cfg-row"><div class="cfg-label">HP ganho por onda</div><input class="cfg-slider" type="range" id="cfg-hp-per-wave" min="0" max="10" step="1" value="1" oninput="cfgSync(this,&#39;cfg-hp-per-wave-val&#39;)"><div class="cfg-val" id="cfg-hp-per-wave-val">1</div></div>
+    <div class="cfg-row"><div class="cfg-label">HP máx inimigo (cap)</div><input class="cfg-slider" type="range" id="cfg-hp-cap" min="2" max="50" step="1" value="8" oninput="cfgSync(this,&#39;cfg-hp-cap-val&#39;)"><div class="cfg-val" id="cfg-hp-cap-val">8</div></div>
+  </div>
+
+  <div class="cfg-section">
+    <div class="cfg-section-title">⚔️ Guerreiro</div>
+    <div class="cfg-row"><div class="cfg-label">HP do guerreiro</div><input class="cfg-slider" type="range" id="cfg-warrior-hp" min="10" max="200" step="5" value="50" oninput="cfgSync(this,&#39;cfg-warrior-hp-val&#39;)"><div class="cfg-val" id="cfg-warrior-hp-val">50</div></div>
+    <div class="cfg-row"><div class="cfg-label">Dano do slash</div><input class="cfg-slider" type="range" id="cfg-warrior-dmg" min="1" max="20" step="1" value="2" oninput="cfgSync(this,&#39;cfg-warrior-dmg-val&#39;)"><div class="cfg-val" id="cfg-warrior-dmg-val">2</div></div>
+    <div class="cfg-row"><div class="cfg-label">Dano do especial</div><input class="cfg-slider" type="range" id="cfg-warrior-spec-dmg" min="10" max="500" step="10" value="100" oninput="cfgSync(this,&#39;cfg-warrior-spec-dmg-val&#39;)"><div class="cfg-val" id="cfg-warrior-spec-dmg-val">100</div></div>
+    <div class="cfg-row"><div class="cfg-label">Raio do especial (px)</div><input class="cfg-slider" type="range" id="cfg-warrior-spec-r" min="10" max="80" step="2" value="26" oninput="cfgSync(this,&#39;cfg-warrior-spec-r-val&#39;)"><div class="cfg-val" id="cfg-warrior-spec-r-val">26</div></div>
+  </div>
+
+  <div class="cfg-section">
+    <div class="cfg-section-title">🔮 Mago</div>
+    <div class="cfg-row"><div class="cfg-label">HP do mago</div><input class="cfg-slider" type="range" id="cfg-mage-hp" min="10" max="200" step="5" value="25" oninput="cfgSync(this,&#39;cfg-mage-hp-val&#39;)"><div class="cfg-val" id="cfg-mage-hp-val">25</div></div>
+    <div class="cfg-row"><div class="cfg-label">Dano da bola de fogo</div><input class="cfg-slider" type="range" id="cfg-mage-dmg" min="1" max="20" step="1" value="5" oninput="cfgSync(this,&#39;cfg-mage-dmg-val&#39;)"><div class="cfg-val" id="cfg-mage-dmg-val">5</div></div>
+    <div class="cfg-row"><div class="cfg-label">Duração dos orbes (s)</div><input class="cfg-slider" type="range" id="cfg-orb-life" min="3" max="30" step="1" value="10" oninput="cfgSync(this,&#39;cfg-orb-life-val&#39;)"><div class="cfg-val" id="cfg-orb-life-val">10</div></div>
+    <div class="cfg-row"><div class="cfg-label">Cooldown orbe p/ inimigo (s)</div><input class="cfg-slider" type="range" id="cfg-orb-cd" min="0.1" max="3" step="0.1" value="0.5" oninput="cfgSync(this,&#39;cfg-orb-cd-val&#39;)"><div class="cfg-val" id="cfg-orb-cd-val">0.5</div></div>
+  </div>
+
+  <div class="cfg-section">
+    <div class="cfg-section-title">👾 Inimigos</div>
+    <div class="cfg-row"><div class="cfg-label">Dano guerreiro inimigo</div><input class="cfg-slider" type="range" id="cfg-ew-dmg" min="1" max="20" step="1" value="1" oninput="cfgSync(this,&#39;cfg-ew-dmg-val&#39;)"><div class="cfg-val" id="cfg-ew-dmg-val">1</div></div>
+    <div class="cfg-row"><div class="cfg-label">Dano arqueiro inimigo</div><input class="cfg-slider" type="range" id="cfg-ea-dmg" min="1" max="20" step="1" value="1" oninput="cfgSync(this,&#39;cfg-ea-dmg-val&#39;)"><div class="cfg-val" id="cfg-ea-dmg-val">1</div></div>
+    <div class="cfg-row"><div class="cfg-label">Dano mago inimigo</div><input class="cfg-slider" type="range" id="cfg-em-dmg" min="1" max="20" step="1" value="2" oninput="cfgSync(this,&#39;cfg-em-dmg-val&#39;)"><div class="cfg-val" id="cfg-em-dmg-val">2</div></div>
+    <div class="cfg-row"><div class="cfg-label">Carga p/ ativar especial</div><input class="cfg-slider" type="range" id="cfg-spec-charge" min="10" max="300" step="10" value="100" oninput="cfgSync(this,&#39;cfg-spec-charge-val&#39;)"><div class="cfg-val" id="cfg-spec-charge-val">100</div></div>
+  </div>
+
+  <div class="cfg-btn-row">
+    <button class="cfg-btn cfg-btn-reset" onclick="cfgReset()">↺ Padrão</button>
+    <button class="cfg-btn cfg-btn-close" onclick="closeConfig()">✔ Salvar e fechar</button>
+  </div>
+</div>
+
 <!-- ── TELA INICIAL ── -->
 <div id="title-screen">
+  <div id="title-hit-zone" onclick="openConfig()"></div>
   <div class="title-logo">⚔️ ACTION RPG</div>
   <div class="title-sub">Escolha sua classe</div>
   <div class="title-choose">CLASSE</div>
@@ -305,7 +521,7 @@
 
   <div class="leaderboard-wrap">
     <div class="lb-title">🏆 Recordes Globais</div>
-    <div id="lb-content"><table class="lb-table"><tbody><tr><th>#</th><th>Nome</th><th>★</th><th>Onda</th><th>Classe</th></tr><tr><td>🥇</td><td>ganhei</td><td>125</td><td>18</td><td>⚔️</td></tr><tr><td>🥈</td><td>a</td><td>80</td><td>13</td><td>🔮</td></tr><tr><td>🥉</td><td>nova</td><td>77</td><td>11</td><td>⚔️</td></tr><tr><td>4</td><td>vamo</td><td>74</td><td>12</td><td>🔮</td></tr><tr><td>5</td><td>selva</td><td>69</td><td>10</td><td>⚔️</td></tr><tr><td>6</td><td>nova</td><td>69</td><td>11</td><td>⚔️</td></tr><tr><td>7</td><td>eita</td><td>56</td><td>9</td><td>🔮</td></tr><tr><td>8</td><td>haniel</td><td>54</td><td>9</td><td>🔮</td></tr><tr><td>9</td><td>k</td><td>50</td><td>11</td><td>⚔️</td></tr><tr><td>10</td><td>zerosete</td><td>45</td><td>8</td><td>🔮</td></tr></tbody></table></div>
+    <div id="lb-content"><table class="lb-table"><tbody><tr><th>#</th><th>Nome</th><th>★</th><th>Onda</th><th>Classe</th></tr><tr><td>🥇</td><td>ganhei</td><td>125</td><td>18</td><td>⚔️</td></tr><tr><td>🥈</td><td>selva</td><td>84</td><td>11</td><td>🔮</td></tr><tr><td>🥉</td><td>a</td><td>80</td><td>13</td><td>🔮</td></tr><tr><td>4</td><td>nova</td><td>77</td><td>11</td><td>⚔️</td></tr><tr><td>5</td><td>vamo</td><td>74</td><td>12</td><td>🔮</td></tr><tr><td>6</td><td>ogro</td><td>70</td><td>10</td><td>⚔️</td></tr><tr><td>7</td><td>selva</td><td>69</td><td>10</td><td>⚔️</td></tr><tr><td>8</td><td>nova</td><td>69</td><td>11</td><td>⚔️</td></tr><tr><td>9</td><td>especial</td><td>60</td><td>9</td><td>⚔️</td></tr><tr><td>10</td><td>tempo</td><td>60</td><td>9</td><td>🔮</td></tr></tbody></table></div>
   </div>
 </div>
 
@@ -341,9 +557,9 @@
     </div>
     <!-- botão especial (centro) -->
     <div id="special-btn" onclick="activateSpecial()">
+      <div id="special-fill"></div>
       <span id="special-icon">⚡</span>
       <div class="spec-label" id="spec-label">ESPECIAL</div>
-      <div id="special-charge"></div>
     </div>
     <!-- joystick de ataque direcional -->
     <div id="attack-zone">
@@ -354,6 +570,85 @@
 </div>
 
 <script>
+// ─── CONFIGURAÇÕES DO JOGO ───────────────────────────────────────────────────
+const CFG_DEFAULTS = {
+  waveTime:      15,   // segundos entre ondas
+  enemyHp:        2,   // HP inicial inimigo guerreiro
+  hpPerWave:      1,   // HP ganho por onda
+  hpCap:          8,   // cap de HP do inimigo
+  warriorHp:     50,
+  warriorDmg:     2,
+  warriorSpecDmg:100,
+  warriorSpecR:  26,
+  mageHp:        25,
+  mageDmg:        5,
+  orbLife:       10,   // segundos
+  orbCd:        0.5,   // segundos
+  ewDmg:          1,   // dano guerreiro inimigo
+  eaDmg:          1,   // dano arqueiro inimigo
+  emDmg:          2,   // dano mago inimigo
+  specCharge:   100,   // carga para ativar especial
+};
+let CFG = { ...CFG_DEFAULTS };
+
+function cfgSync(slider, valId) {
+  document.getElementById(valId).textContent = slider.value;
+}
+function cfgRead() {
+  CFG.waveTime      = +document.getElementById('cfg-wave-time').value;
+  CFG.enemyHp       = +document.getElementById('cfg-enemy-hp').value;
+  CFG.hpPerWave     = +document.getElementById('cfg-hp-per-wave').value;
+  CFG.hpCap         = +document.getElementById('cfg-hp-cap').value;
+  CFG.warriorHp     = +document.getElementById('cfg-warrior-hp').value;
+  CFG.warriorDmg    = +document.getElementById('cfg-warrior-dmg').value;
+  CFG.warriorSpecDmg= +document.getElementById('cfg-warrior-spec-dmg').value;
+  CFG.warriorSpecR  = +document.getElementById('cfg-warrior-spec-r').value;
+  CFG.mageHp        = +document.getElementById('cfg-mage-hp').value;
+  CFG.mageDmg       = +document.getElementById('cfg-mage-dmg').value;
+  CFG.orbLife       = +document.getElementById('cfg-orb-life').value;
+  CFG.orbCd         = +document.getElementById('cfg-orb-cd').value;
+  CFG.ewDmg         = +document.getElementById('cfg-ew-dmg').value;
+  CFG.eaDmg         = +document.getElementById('cfg-ea-dmg').value;
+  CFG.emDmg         = +document.getElementById('cfg-em-dmg').value;
+  CFG.specCharge    = +document.getElementById('cfg-spec-charge').value;
+}
+function cfgApplyToSliders(c) {
+  const set = (id, v) => {
+    const el = document.getElementById(id); if(!el) return;
+    el.value = v;
+    const valId = id + '-val';
+    const valEl = document.getElementById(valId); if(valEl) valEl.textContent = v;
+  };
+  set('cfg-wave-time',      c.waveTime);
+  set('cfg-enemy-hp',       c.enemyHp);
+  set('cfg-hp-per-wave',    c.hpPerWave);
+  set('cfg-hp-cap',         c.hpCap);
+  set('cfg-warrior-hp',     c.warriorHp);
+  set('cfg-warrior-dmg',    c.warriorDmg);
+  set('cfg-warrior-spec-dmg', c.warriorSpecDmg);
+  set('cfg-warrior-spec-r', c.warriorSpecR);
+  set('cfg-mage-hp',        c.mageHp);
+  set('cfg-mage-dmg',       c.mageDmg);
+  set('cfg-orb-life',       c.orbLife);
+  set('cfg-orb-cd',         c.orbCd);
+  set('cfg-ew-dmg',         c.ewDmg);
+  set('cfg-ea-dmg',         c.eaDmg);
+  set('cfg-em-dmg',         c.emDmg);
+  set('cfg-spec-charge',    c.specCharge);
+}
+function openConfig() {
+  cfgApplyToSliders(CFG);
+  document.getElementById('config-screen').classList.remove('hidden');
+}
+function closeConfig() {
+  cfgRead();
+  document.getElementById('config-screen').classList.add('hidden');
+}
+function cfgReset() {
+  CFG = { ...CFG_DEFAULTS };
+  cfgApplyToSliders(CFG);
+}
+
 // ─── SUPABASE CONFIG ─────────────────────────────────────────────────────────
 const SUPA_URL = 'https://hqipohxhtghdvxzdkonr.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxaXBvaHhodGdoZHZ4emRrb25yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwNTAzNjcsImV4cCI6MjA5MjYyNjM2N30.6jEVYrc4Bwl6-2_ImRP5go8v2tHhwS8Ye_Z8MLVJ-EE';
@@ -640,7 +935,7 @@ const atkZone = document.getElementById('attack-zone');
 const atkKnob = document.getElementById('attack-knob');
 const atkIcon = document.getElementById('atk-icon');
 const specBtn = document.getElementById('special-btn');
-const specCharge = document.getElementById('special-charge');
+const specFill = document.getElementById('special-fill');
 // atkBtn mantido como alias para compatibilidade
 const atkBtn = atkKnob;
 
@@ -791,17 +1086,18 @@ function initGame(cls = 'warrior') {
   selectedClass = cls;
   mapGrid = generateMap(); // novo mapa a cada partida
   state = 'play';
-  score = 0; wave = 1; waveTimer = 0; waveEnemyHp = 2;
+  score = 0; wave = 1; waveTimer = 0; waveEnemyHp = CFG.enemyHp;
   attacks = []; enemies = []; flashTimer = 0; gameOverTimer = 0;
   warriorsSpawned = 0; archersSpawned = 0;
   specialCharge = 0; specialActive = false; specialOrbs = []; timeFreeze = 0; timeFreezeAnim = 0;
+  if (player) player.shockwave = null;
   updateSpecialUI();
   const isMage = cls === 'mage';
   player = {
     x: 150, y: 110, w: 7, h: 8,
     speed: isMage ? 0.9 : 1.3,
-    hp: isMage ? 25 : 50,
-    maxHp: isMage ? 25 : 50,
+    hp: isMage ? CFG.mageHp : CFG.warriorHp,
+    maxHp: isMage ? CFG.mageHp : CFG.warriorHp,
     class: cls,
     dir: { x: 1, y: 0 },
     attackCooldown: 0, attackAnim: 0, atkDir: null, atkAnimDir: null,
@@ -955,7 +1251,7 @@ function playerAttack() {
       w: 8, h: 8,
       vx: adir.x * 2.2, vy: adir.y * 2.2,
       life: 700,
-      owner: 'player', damage: 5, hitIds: new Set(),
+      owner: 'player', damage: CFG.mageDmg, hitIds: new Set(),
       type: 'fireball',
     });
     addCharge(1);
@@ -983,7 +1279,7 @@ function playerAttack() {
       x: cx + sd.x/len*REACH - HW/2,
       y: cy + sd.y/len*REACH - HH/2,
       w: HW, h: HH, life: 80,
-      owner: 'player', damage: 2, hitIds,
+      owner: 'player', damage: CFG.warriorDmg, hitIds,
       type: 'slash',
     });
   });
@@ -1006,7 +1302,7 @@ function enemyAttack(e) {
       w: 6, h: 4,
       vx: (dx/len)*2.4, vy: (dy/len)*2.4,
       life: 900,
-      owner: 'enemy', damage: 1, hitIds: new Set(),
+      owner: 'enemy', damage: CFG.eaDmg, hitIds: new Set(),
       type: 'arrow',
       angle: Math.atan2(dy, dx),
     });
@@ -1020,7 +1316,7 @@ function enemyAttack(e) {
       w: 8, h: 8,
       vx: (dx/len)*1.8, vy: (dy/len)*1.8,
       life: 1000,
-      owner: 'enemy', damage: 2, hitIds: new Set(),
+      owner: 'enemy', damage: CFG.emDmg, hitIds: new Set(),
       type: 'enemyOrb',
     });
   } else {
@@ -1029,7 +1325,7 @@ function enemyAttack(e) {
     attacks.push({
       x: cx + e.dir.x*10 - 5, y: cy + e.dir.y*10 - 5,
       w: 10, h: 10, life: 120,
-      owner: 'enemy', damage: 1, hitIds: new Set(),
+      owner: 'enemy', damage: CFG.ewDmg, hitIds: new Set(),
       type: 'melee',
     });
   }
@@ -1110,7 +1406,7 @@ const SFX = {
 };
 
 // ─── SISTEMA DE ESPECIAL ─────────────────────────────────────────────────────
-const MAX_CHARGE = 100;
+let MAX_CHARGE = 100; // sobrescrito por CFG
 let specialCharge = 0;
 let specialActive = false; // mago: orbs girando ativos
 let specialOrbs   = [];    // { angle, life }
@@ -1118,7 +1414,7 @@ let timeFreeze    = 0;     // ms restantes de tempo parado (guerreiro)
 let timeFreezeAnim = 0;    // progresso da animação 360° (0→1)
 
 function addCharge(n) {
-  // Mago não carrega enquanto orbes estão ativos
+  MAX_CHARGE = CFG.specCharge;
   if (player && player.class === 'mage' && specialActive) return;
   if (specialCharge >= MAX_CHARGE) return;
   specialCharge = Math.min(MAX_CHARGE, specialCharge + n);
@@ -1126,13 +1422,13 @@ function addCharge(n) {
 }
 
 function updateSpecialUI() {
-  if (!specBtn || !specCharge) return;
+  if (!specBtn || !specFill) return;
   const isMage = player && player.class === 'mage';
-  const ready = specialCharge >= MAX_CHARGE;
-  specCharge.style.width = (specialCharge / MAX_CHARGE * 100) + '%';
-  specCharge.className = isMage ? 'mage' : '';
-  specBtn.className = '';
-  if (ready) specBtn.classList.add(isMage ? 'ready-mage' : 'ready-warrior');
+  const pct    = (specialCharge / MAX_CHARGE * 100);
+  const ready  = specialCharge >= MAX_CHARGE;
+  specFill.style.height = pct + '%';
+  specFill.className = isMage ? 'mage' : '';
+  specBtn.className  = ready ? (isMage ? 'ready-mage' : 'ready-warrior') : '';
   document.getElementById('special-icon').textContent = isMage ? '🔮' : '⚡';
 }
 
@@ -1143,22 +1439,17 @@ function activateSpecial() {
   updateSpecialUI();
 
   if (player.class === 'warrior') {
-    // Golpe 360° imediato (sem parar tempo)
-    timeFreezeAnim = 0.01; // só para animação do arco
     SFX.warriorSpecial();
-    const cx = player.x + player.w/2, cy = player.y + player.h/2;
-    const REACH = 28;
-    const hitIds = new Set();
-    for (let i = 0; i < 16; i++) {
-      const angle = (i / 16) * Math.PI * 2;
-      attacks.push({
-        x: cx + Math.cos(angle)*REACH - 7,
-        y: cy + Math.sin(angle)*REACH - 7,
-        w: 14, h: 14, life: 120,
-        owner: 'player', damage: 100, hitIds,
-        type: 'special360',
-      });
-    }
+    // Onda expansiva — cresce de 0 até 26px (2x alcance básico=13) em 750ms
+    player.shockwave = {
+      cx: player.x + player.w/2,
+      cy: player.y + player.h/2,
+      radius: 0,
+      maxRadius: 26,
+      duration: 750,
+      elapsed: 0,
+      hitIds: new Set(), // referências aos objetos inimigo
+    };
   } else {
     // Mago — 3 orbes girando por 10s
     SFX.mageSpecial();
@@ -1324,8 +1615,8 @@ function update(dt) {
   if (specialActive && specialOrbs.length > 0) {
     const ORB_SPEED  = 0.003; // rad/ms
     const ORB_RADIUS = 16;
-    const ORB_LIFE_MS = 10000;
-    const ORB_HIT_CD  = 500; // ms entre danos no mesmo inimigo por orbe
+    const ORB_LIFE_MS = CFG.orbLife * 1000;
+    const ORB_HIT_CD  = CFG.orbCd * 1000;
     if (!specialOrbs[0].life) specialOrbs.forEach(o => o.life = ORB_LIFE_MS);
     specialOrbs.forEach((o, oi) => {
       o.angle += ORB_SPEED * dt;
@@ -1355,11 +1646,36 @@ function update(dt) {
     });
   }
 
+  // ── Shockwave do guerreiro
+  if (player.shockwave) {
+    const sw = player.shockwave;
+    sw.elapsed += dt;
+    sw.radius = (sw.elapsed / sw.duration) * sw.maxRadius;
+    // Testa colisão circular com cada inimigo
+    for (const e of enemies) {
+      if (sw.hitIds.has(e)) continue;
+      const ecx = e.x + e.w/2, ecy = e.y + e.h/2;
+      const dist = Math.sqrt((ecx-sw.cx)**2 + (ecy-sw.cy)**2);
+      // acerta quando a frente da onda passa pelo centro do inimigo
+      if (dist <= sw.radius + 4 && dist >= sw.radius - 6) {
+        sw.hitIds.add(e);
+        e.hp -= 100; e.hitFlash = 300;
+        SFX.hit();
+      }
+    }
+    // Remove inimigos mortos
+    enemies = enemies.filter(e => {
+      if (e.hp <= 0) { SFX.enemyDie(); score++; return false; }
+      return true;
+    });
+    if (sw.elapsed >= sw.duration) player.shockwave = null;
+  }
+
   // ── Wave
   waveTimer += dt;
-  if (waveTimer > 15000) {
+  if (waveTimer > CFG.waveTime * 1000) {
     waveTimer = 0; wave++;
-    waveEnemyHp = Math.min(2 + wave - 1, 8);
+    waveEnemyHp = Math.min(CFG.enemyHp + (wave-1)*CFG.hpPerWave, CFG.hpCap);
     for (let i = 0; i < Math.min(2+wave, 8); i++) spawnEnemy();
     SFX.newWave();
   }
@@ -1433,6 +1749,26 @@ function update(dt) {
       if (collidesWithMap(a.x, a.y, a.w, a.h)) {
         attacks.splice(i,1); continue;
       }
+    }
+
+    // cresce shockwave e detecta colisão circular
+    if (a.type === 'shockwave') {
+      a.elapsed += dt;
+      a.r = Math.min(a.rMax, (a.elapsed / a.growTime) * a.rMax);
+      for (let j = enemies.length-1; j >= 0; j--) {
+        const e = enemies[j];
+        if (a.hitIds.has(e)) continue;
+        // testa se o inimigo está dentro do círculo
+        const ecx = e.x + e.w/2, ecy = e.y + e.h/2;
+        const dist = Math.sqrt((ecx-a.cx)**2 + (ecy-a.cy)**2);
+        if (dist <= a.r + e.w/2) {
+          a.hitIds.add(e);
+          e.hp -= a.damage; e.hitFlash = 300;
+          SFX.hit();
+          if (e.hp <= 0) { SFX.enemyDie(); enemies.splice(j,1); score++; addCharge(1); }
+        }
+      }
+      continue; // não passa pelo hit detection normal
     }
 
     if (a.owner === 'player') {
@@ -1509,21 +1845,29 @@ function render() {
     ctx.restore();
   }
 
-  // Animação 360° do guerreiro (visual)
-  if (timeFreezeAnim > 0) {
-    const cx = player.x+player.w/2, cy = player.y+player.h/2;
-    const prog = timeFreezeAnim;
+  // Shockwave do guerreiro
+  if (player.shockwave) {
+    const sw = player.shockwave;
+    const prog = sw.elapsed / sw.duration; // 0→1
+    const alpha = 1 - prog * 0.6;
     ctx.save();
+    // anel principal
     ctx.beginPath();
-    ctx.arc(cx, cy, 28, -Math.PI/2, -Math.PI/2 + prog * Math.PI*2);
-    ctx.strokeStyle = `rgba(255,220,80,${0.9 - prog*0.5})`;
-    ctx.lineWidth = 4 - prog*2;
+    ctx.arc(sw.cx, sw.cy, sw.radius, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(255,220,60,${alpha})`;
+    ctx.lineWidth = 5 - prog*3;
     ctx.stroke();
+    // glow externo
     ctx.beginPath();
-    ctx.arc(cx, cy, 28, 0, Math.PI*2);
-    ctx.strokeStyle = `rgba(255,200,50,${0.15 - prog*0.15})`;
-    ctx.lineWidth = 10;
+    ctx.arc(sw.cx, sw.cy, sw.radius, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(255,180,0,${alpha*0.4})`;
+    ctx.lineWidth = 12 - prog*8;
     ctx.stroke();
+    // área interna tênue
+    ctx.beginPath();
+    ctx.arc(sw.cx, sw.cy, sw.radius, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(255,200,50,${0.04 * (1-prog)})`;
+    ctx.fill();
     ctx.restore();
   }
 
