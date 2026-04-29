@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0052)file:///C:/Users/user/Downloads/rpg_mobile_v4_2.html -->
+<!-- saved from url=(0052)file:///C:/Users/user/Downloads/rpg_mobile_v4_4.html -->
 <html lang="pt-br"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -100,16 +100,30 @@
 
   /* HUD stats acima do canvas */
   #hud {
-    display: flex; gap: 16px; align-items: center; justify-content: center;
-    padding: 6px 12px;
-    color: #ddd; font-family: monospace; font-size: 13px;
+    display: flex; gap: 14px; align-items: center; justify-content: center;
+    padding: 5px 12px;
+    color: #ddd; font-family: monospace; font-size: 12px;
     letter-spacing: 0.5px;
     flex-shrink: 0;
     width: 100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.4) 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
   }
   #hud span { white-space: nowrap; }
-  #hp-bar-wrap { flex: 1; max-width: 100px; height: 6px; background: #300; border-radius: 3px; overflow: hidden; }
-  #hp-bar { height: 100%; background: #cc2020; border-radius: 3px; transition: width 0.1s; }
+  #hp-bar-wrap {
+    flex: 1; max-width: 110px; height: 8px;
+    background: rgba(80,0,0,0.6);
+    border-radius: 4px; overflow: hidden;
+    border: 1px solid rgba(180,0,0,0.4);
+    box-shadow: 0 0 6px rgba(200,0,0,0.2) inset;
+  }
+  #hp-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #aa1010, #ee2020);
+    border-radius: 4px;
+    transition: width 0.1s;
+    box-shadow: 0 0 4px rgba(255,60,60,0.4);
+  }
 
   /* ── BOTÕES DE ÁUDIO ── */
   #audio-controls {
@@ -391,8 +405,8 @@
     </div>
     <div class="cfg-row">
       <div class="cfg-label">Dano do especial</div>
-      <input class="cfg-slider" type="range" id="cfg-warrior-spec-dmg" min="10" max="500" step="10" value="100" oninput="cfgSync(this,&#39;cfg-warrior-spec-dmg-val&#39;)">
-      <div class="cfg-val" id="cfg-warrior-spec-dmg-val">100</div>
+      <input class="cfg-slider" type="range" id="cfg-warrior-spec-dmg" min="1" max="500" step="1" value="5" oninput="cfgSync(this,&#39;cfg-warrior-spec-dmg-val&#39;)">
+      <div class="cfg-val" id="cfg-warrior-spec-dmg-val">5</div>
     </div>
     <div class="cfg-row">
       <div class="cfg-label">Raio do especial (px)</div>
@@ -444,8 +458,8 @@
     </div>
     <div class="cfg-row">
       <div class="cfg-label">Carga p/ ativar especial</div>
-      <input class="cfg-slider" type="range" id="cfg-spec-charge" min="10" max="300" step="10" value="100" oninput="cfgSync(this,&#39;cfg-spec-charge-val&#39;)">
-      <div class="cfg-val" id="cfg-spec-charge-val">100</div>
+      <input class="cfg-slider" type="range" id="cfg-spec-charge" min="10" max="300" step="10" value="50" oninput="cfgSync(this,&#39;cfg-spec-charge-val&#39;)">
+      <div class="cfg-val" id="cfg-spec-charge-val">50</div>
     </div>
   </div>
 
@@ -472,7 +486,7 @@
     <div class="cfg-section-title">⚔️ Guerreiro</div>
     <div class="cfg-row"><div class="cfg-label">HP do guerreiro</div><input class="cfg-slider" type="range" id="cfg-warrior-hp" min="10" max="200" step="5" value="50" oninput="cfgSync(this,&#39;cfg-warrior-hp-val&#39;)"><div class="cfg-val" id="cfg-warrior-hp-val">50</div></div>
     <div class="cfg-row"><div class="cfg-label">Dano do slash</div><input class="cfg-slider" type="range" id="cfg-warrior-dmg" min="1" max="20" step="1" value="2" oninput="cfgSync(this,&#39;cfg-warrior-dmg-val&#39;)"><div class="cfg-val" id="cfg-warrior-dmg-val">2</div></div>
-    <div class="cfg-row"><div class="cfg-label">Dano do especial</div><input class="cfg-slider" type="range" id="cfg-warrior-spec-dmg" min="10" max="500" step="10" value="100" oninput="cfgSync(this,&#39;cfg-warrior-spec-dmg-val&#39;)"><div class="cfg-val" id="cfg-warrior-spec-dmg-val">100</div></div>
+    <div class="cfg-row"><div class="cfg-label">Dano do especial</div><input class="cfg-slider" type="range" id="cfg-warrior-spec-dmg" min="1" max="500" step="1" value="5" oninput="cfgSync(this,&#39;cfg-warrior-spec-dmg-val&#39;)"><div class="cfg-val" id="cfg-warrior-spec-dmg-val">5</div></div>
     <div class="cfg-row"><div class="cfg-label">Raio do especial (px)</div><input class="cfg-slider" type="range" id="cfg-warrior-spec-r" min="10" max="80" step="2" value="26" oninput="cfgSync(this,&#39;cfg-warrior-spec-r-val&#39;)"><div class="cfg-val" id="cfg-warrior-spec-r-val">26</div></div>
   </div>
 
@@ -489,7 +503,7 @@
     <div class="cfg-row"><div class="cfg-label">Dano guerreiro inimigo</div><input class="cfg-slider" type="range" id="cfg-ew-dmg" min="1" max="20" step="1" value="1" oninput="cfgSync(this,&#39;cfg-ew-dmg-val&#39;)"><div class="cfg-val" id="cfg-ew-dmg-val">1</div></div>
     <div class="cfg-row"><div class="cfg-label">Dano arqueiro inimigo</div><input class="cfg-slider" type="range" id="cfg-ea-dmg" min="1" max="20" step="1" value="1" oninput="cfgSync(this,&#39;cfg-ea-dmg-val&#39;)"><div class="cfg-val" id="cfg-ea-dmg-val">1</div></div>
     <div class="cfg-row"><div class="cfg-label">Dano mago inimigo</div><input class="cfg-slider" type="range" id="cfg-em-dmg" min="1" max="20" step="1" value="2" oninput="cfgSync(this,&#39;cfg-em-dmg-val&#39;)"><div class="cfg-val" id="cfg-em-dmg-val">2</div></div>
-    <div class="cfg-row"><div class="cfg-label">Carga p/ ativar especial</div><input class="cfg-slider" type="range" id="cfg-spec-charge" min="10" max="300" step="10" value="100" oninput="cfgSync(this,&#39;cfg-spec-charge-val&#39;)"><div class="cfg-val" id="cfg-spec-charge-val">100</div></div>
+    <div class="cfg-row"><div class="cfg-label">Carga p/ ativar especial</div><input class="cfg-slider" type="range" id="cfg-spec-charge" min="10" max="300" step="10" value="50" oninput="cfgSync(this,&#39;cfg-spec-charge-val&#39;)"><div class="cfg-val" id="cfg-spec-charge-val">50</div></div>
   </div>
 
   <div class="cfg-btn-row">
@@ -521,7 +535,7 @@
 
   <div class="leaderboard-wrap">
     <div class="lb-title">🏆 Recordes Globais</div>
-    <div id="lb-content"><table class="lb-table"><tbody><tr><th>#</th><th>Nome</th><th>★</th><th>Onda</th><th>Classe</th></tr><tr><td>🥇</td><td>ganhei</td><td>125</td><td>18</td><td>⚔️</td></tr><tr><td>🥈</td><td>selva</td><td>84</td><td>11</td><td>🔮</td></tr><tr><td>🥉</td><td>a</td><td>80</td><td>13</td><td>🔮</td></tr><tr><td>4</td><td>nova</td><td>77</td><td>11</td><td>⚔️</td></tr><tr><td>5</td><td>vamo</td><td>74</td><td>12</td><td>🔮</td></tr><tr><td>6</td><td>ogro</td><td>70</td><td>10</td><td>⚔️</td></tr><tr><td>7</td><td>selva</td><td>69</td><td>10</td><td>⚔️</td></tr><tr><td>8</td><td>nova</td><td>69</td><td>11</td><td>⚔️</td></tr><tr><td>9</td><td>especial</td><td>60</td><td>9</td><td>⚔️</td></tr><tr><td>10</td><td>tempo</td><td>60</td><td>9</td><td>🔮</td></tr></tbody></table></div>
+    <div id="lb-content"><table class="lb-table"><tbody><tr><th>#</th><th>Nome</th><th>★</th><th>Onda</th><th>Classe</th></tr><tr><td>🥇</td><td>ganhei</td><td>125</td><td>18</td><td>⚔️</td></tr><tr><td>🥈</td><td>beserker</td><td>85</td><td>13</td><td>⚔️</td></tr><tr><td>🥉</td><td>selva</td><td>84</td><td>11</td><td>🔮</td></tr><tr><td>4</td><td>a</td><td>80</td><td>13</td><td>🔮</td></tr><tr><td>5</td><td>nova</td><td>77</td><td>11</td><td>⚔️</td></tr><tr><td>6</td><td>vamo</td><td>74</td><td>12</td><td>🔮</td></tr><tr><td>7</td><td>ogro</td><td>70</td><td>10</td><td>⚔️</td></tr><tr><td>8</td><td>selva</td><td>69</td><td>10</td><td>⚔️</td></tr><tr><td>9</td><td>nova</td><td>69</td><td>11</td><td>⚔️</td></tr><tr><td>10</td><td>falcon</td><td>66</td><td>9</td><td>⚔️</td></tr></tbody></table></div>
   </div>
 </div>
 
@@ -546,7 +560,7 @@
 
   <!-- Canvas -->
   <div id="canvas-wrap">
-    <canvas id="c" width="320" height="240" style="width: 976px; height: 732px;"></canvas>
+    <canvas id="c" width="320" height="240" style="width: 978px; height: 734px;"></canvas>
   </div>
 
   <!-- Controles -->
@@ -578,7 +592,7 @@ const CFG_DEFAULTS = {
   hpCap:          8,   // cap de HP do inimigo
   warriorHp:     50,
   warriorDmg:     2,
-  warriorSpecDmg:100,
+  warriorSpecDmg:  5,
   warriorSpecR:  26,
   mageHp:        25,
   mageDmg:        5,
@@ -587,7 +601,7 @@ const CFG_DEFAULTS = {
   ewDmg:          1,   // dano guerreiro inimigo
   eaDmg:          1,   // dano arqueiro inimigo
   emDmg:          2,   // dano mago inimigo
-  specCharge:   100,   // carga para ativar especial
+  specCharge:    50,   // carga para ativar especial
 };
 let CFG = { ...CFG_DEFAULTS };
 
@@ -838,11 +852,12 @@ resize();
 window.addEventListener('resize', resize);
 
 // ─── MAPA PROCEDURAL ─────────────────────────────────────────────────────────
-const TILE = 10;
-const COLS = GAME_W / TILE; // 32
-const ROWS = GAME_H / TILE; // 24
+const TILE = 16;
+const COLS = Math.floor(GAME_W / TILE); // ~20
+const ROWS = Math.floor(GAME_H / TILE); // ~15
 
-let mapGrid = [];
+let mapGrid = [], mapTileVariant = [], mapTorches = [], mapFloorDecos = [];
+let torchAnim = 0; // ms acumulado para animar tochas
 
 function generateMap() {
   const grid = Array.from({ length: ROWS }, (_, r) =>
@@ -896,7 +911,34 @@ function generateMap() {
         if (grid[sy+dy]?.[sx+dx] !== undefined)
           grid[sy+dy][sx+dx] = 0;
 
-  return grid;
+  // ── Gera variações de tile e decorações
+  const tileVariant = Array.from({length: ROWS}, (_, r) =>
+    Array.from({length: COLS}, (_, c) => {
+      const h = (c*374761393 + r*668265263 + s) & 0xffff;
+      return h % 8; // 0-7 variações
+    })
+  );
+
+  // ── Tochas fixas na parede superior (linha 0, espaçadas uniformemente)
+  const torches = [];
+  // Tochas na borda de cima: posições fixas espaçadas
+  const torchCols = [3, 6, 10, 14, 17];
+  for (const c of torchCols) {
+    if (c < COLS-1) torches.push({tx: c, ty: 0});
+  }
+
+  // ── Posições de decorações de chão (musgo, rachaduras)
+  const floorDecos = [];
+  for (let r = 1; r < ROWS-1; r++) {
+    for (let c = 1; c < COLS-1; c++) {
+      if (grid[r][c] === 0) {
+        const h = (c*999983 + r*500009 + s) & 0xffff;
+        if (h % 9 === 0) floorDecos.push({tx: c, ty: r, type: h % 3}); // 0=crack 1=moss 2=pebble
+      }
+    }
+  }
+
+  return { grid, tileVariant, torches, floorDecos };
 }
 
 function isNavigable(grid, sx, sy) {
@@ -1084,7 +1126,9 @@ function selectClass(cls) {
 
 function initGame(cls = 'warrior') {
   selectedClass = cls;
-  mapGrid = generateMap(); // novo mapa a cada partida
+  const mapData = generateMap();
+  mapGrid = mapData.grid; mapTileVariant = mapData.tileVariant;
+  mapTorches = mapData.torches; mapFloorDecos = mapData.floorDecos;
   state = 'play';
   score = 0; wave = 1; waveTimer = 0; waveEnemyHp = CFG.enemyHp;
   attacks = []; enemies = []; flashTimer = 0; gameOverTimer = 0;
@@ -1406,7 +1450,7 @@ const SFX = {
 };
 
 // ─── SISTEMA DE ESPECIAL ─────────────────────────────────────────────────────
-let MAX_CHARGE = 100; // sobrescrito por CFG
+let MAX_CHARGE = 50; // sobrescrito por CFG
 let specialCharge = 0;
 let specialActive = false; // mago: orbs girando ativos
 let specialOrbs   = [];    // { angle, life }
@@ -1440,15 +1484,17 @@ function activateSpecial() {
 
   if (player.class === 'warrior') {
     SFX.warriorSpecial();
-    // Onda expansiva — cresce de 0 até 26px (2x alcance básico=13) em 750ms
+    // Onda expansiva — cresce de 0 até 26px (2x alcance básico=13) em 250ms
     player.shockwave = {
       cx: player.x + player.w/2,
       cy: player.y + player.h/2,
       radius: 0,
-      maxRadius: 26,
-      duration: 750,
+      maxRadius: CFG.warriorSpecR,
+      growDuration: 150,   // ms para expandir
+      lingerDuration: 500, // ms visível após expandir
+      totalDuration: 650,  // growDuration + lingerDuration
       elapsed: 0,
-      hitIds: new Set(), // referências aos objetos inimigo
+      hitIds: new Set(),   // inimigos já atingidos
     };
   } else {
     // Mago — 3 orbes girando por 10s
@@ -1650,39 +1696,50 @@ function update(dt) {
   if (player.shockwave) {
     const sw = player.shockwave;
     sw.elapsed += dt;
-    sw.radius = (sw.elapsed / sw.duration) * sw.maxRadius;
-    // Testa colisão circular com cada inimigo
-    for (const e of enemies) {
-      if (sw.hitIds.has(e)) continue;
-      const ecx = e.x + e.w/2, ecy = e.y + e.h/2;
-      const dist = Math.sqrt((ecx-sw.cx)**2 + (ecy-sw.cy)**2);
-      // acerta quando a frente da onda passa pelo centro do inimigo
-      if (dist <= sw.radius + 4 && dist >= sw.radius - 6) {
-        sw.hitIds.add(e);
-        e.hp -= 100; e.hitFlash = 300;
-        SFX.hit();
+    // fase de crescimento
+    if (sw.elapsed <= sw.growDuration) {
+      sw.radius = (sw.elapsed / sw.growDuration) * sw.maxRadius;
+      // Testa colisão circular com cada inimigo
+      for (const e of enemies) {
+        if (sw.hitIds.has(e)) continue;
+        const ecx = e.x + e.w/2, ecy = e.y + e.h/2;
+        const dist = Math.sqrt((ecx-sw.cx)**2 + (ecy-sw.cy)**2);
+        if (dist <= sw.radius + 4) {
+          sw.hitIds.add(e);
+          e.hp -= CFG.warriorSpecDmg;
+          e.hitFlash = 300;
+          e.stunned = 1000; // stun de 1 segundo
+          SFX.hit();
+        }
       }
+    } else {
+      sw.radius = sw.maxRadius; // mantém tamanho máximo durante linger
     }
     // Remove inimigos mortos
     enemies = enemies.filter(e => {
-      if (e.hp <= 0) { SFX.enemyDie(); score++; return false; }
+      if (e.hp <= 0) { SFX.enemyDie(); score++; addCharge(1); return false; }
       return true;
     });
-    if (sw.elapsed >= sw.duration) player.shockwave = null;
+    if (sw.elapsed >= sw.totalDuration) player.shockwave = null;
   }
 
   // ── Wave
   waveTimer += dt;
-  if (waveTimer > CFG.waveTime * 1000) {
+  torchAnim += dt;
+  // pula para próxima onda se não há inimigos vivos
+  const noEnemies = enemies.length === 0;
+  if (noEnemies || waveTimer > CFG.waveTime * 1000) {
     waveTimer = 0; wave++;
     waveEnemyHp = Math.min(CFG.enemyHp + (wave-1)*CFG.hpPerWave, CFG.hpCap);
     for (let i = 0; i < Math.min(2+wave, 8); i++) spawnEnemy();
     SFX.newWave();
   }
 
-  // ── Joystick → movimento
+  // ── Joystick → movimento (travado durante shockwave)
   let dx = 0, dy = 0;
-  if (joystick.active) {
+  if (player.shockwave) {
+    // jogador travado durante toda a duração do especial
+  } else if (joystick.active) {
     const dist = Math.sqrt(joystick.dx**2 + joystick.dy**2);
     if (dist > 6) { dx = joystick.dx/dist; dy = joystick.dy/dist; }
   }
@@ -1708,12 +1765,18 @@ function update(dt) {
 
   // ── Enemies
   for (const e of enemies) {
+    // stun — inimigo parado e sem atacar
+    if (e.stunned > 0) {
+      e.stunned -= dt;
+      if (e.hitFlash > 0) e.hitFlash -= dt;
+      continue;
+    }
     const ex = player.x+player.w/2-(e.x+e.w/2);
     const ey = player.y+player.h/2-(e.y+e.h/2);
     const dist = Math.sqrt(ex*ex+ey*ey);
     const isRanged = e.type === 'archer' || e.type === 'enemyMage';
     const attackRange = e.attackRange || 14;
-    const tooClose = isRanged && dist < attackRange * 0.5; // manter distância
+    const tooClose = isRanged && dist < attackRange * 0.5;
 
     if (tooClose) {
       // recua
@@ -1809,27 +1872,219 @@ function update(dt) {
 // ─── RENDER ──────────────────────────────────────────────────────────────────
 function render() {
   // Fundo
-  ctx.fillStyle = '#1a1a0f'; ctx.fillRect(0,0,GAME_W,GAME_H);
+  ctx.fillStyle = '#0d0d0a'; ctx.fillRect(0,0,GAME_W,GAME_H);
 
-  // Tiles
+  // ── TILES DE CHÃO
   for (let ty=0; ty<ROWS; ty++) {
     for (let tx=0; tx<COLS; tx++) {
-      const tile = mapGrid[ty][tx];
-      if (tile === 0) {
-        const v = ((tx*7+ty*13)%5)*2;
-        ctx.fillStyle = `rgb(${32+v},${28+v},${18+v})`;
-        ctx.fillRect(tx*TILE, ty*TILE, TILE, TILE);
-        ctx.fillStyle='rgba(0,0,0,0.12)';
-        ctx.fillRect(tx*TILE, ty*TILE, TILE, 1);
-        ctx.fillRect(tx*TILE, ty*TILE, 1, TILE);
-      } else {
-        ctx.fillStyle='#2a2a1a'; ctx.fillRect(tx*TILE,ty*TILE,TILE,TILE);
-        ctx.fillStyle='#3a3a28'; ctx.fillRect(tx*TILE,ty*TILE,TILE-1,TILE-1);
-        ctx.fillStyle='#4a4a38'; ctx.fillRect(tx*TILE+1,ty*TILE+1,TILE-2,2);
-        ctx.fillStyle='#1a1a10'; ctx.fillRect(tx*TILE,ty*TILE+TILE-1,TILE,1);
+      if (mapGrid[ty][tx] !== 0) continue;
+      const v = mapTileVariant[ty]?.[tx] ?? 0;
+      const X = tx*TILE, Y = ty*TILE, T = TILE;
+
+      // base do tile — variação de cor entre 4 tons de pedra escura
+      const palettes = [
+        ['#2a2218','#332a1e','#3a3025'],
+        ['#261e16','#2e2518','#35291c'],
+        ['#2c2318','#352a1c','#3c3022'],
+        ['#282015','#312719','#38281d'],
+      ];
+      const pal = palettes[v % 4];
+      ctx.fillStyle = pal[0]; ctx.fillRect(X, Y, T, T);
+
+      // bloco de pedra principal com chanfros
+      ctx.fillStyle = pal[1]; ctx.fillRect(X+1, Y+1, T-2, T-2);
+      ctx.fillStyle = pal[2]; ctx.fillRect(X+2, Y+2, T-4, T-4);
+
+      // highlight topo-esquerda
+      ctx.fillStyle = 'rgba(255,240,200,0.07)';
+      ctx.fillRect(X+1, Y+1, T-3, 1);
+      ctx.fillRect(X+1, Y+1, 1, T-3);
+
+      // sombra baixo-direita
+      ctx.fillStyle = 'rgba(0,0,0,0.18)';
+      ctx.fillRect(X+1, Y+T-2, T-2, 1);
+      ctx.fillRect(X+T-2, Y+1, 1, T-2);
+
+      // detalhe de pedra (rachados, textura)
+      if (v === 1) {
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.fillRect(X+4, Y+6, 5, 1);
+        ctx.fillRect(X+7, Y+6, 1, 3);
+      } else if (v === 3) {
+        ctx.fillStyle = 'rgba(0,0,0,0.15)';
+        ctx.fillRect(X+3, Y+9, 4, 1);
+        ctx.fillRect(X+9, Y+4, 1, 4);
+      } else if (v === 5) {
+        ctx.fillStyle = 'rgba(255,240,180,0.05)';
+        ctx.fillRect(X+3, Y+3, 3, 1);
+        ctx.fillRect(X+8, Y+8, 3, 1);
       }
     }
   }
+
+  // ── DECORAÇÕES DE CHÃO (musgo, rachaduras, pedrinhas)
+  for (const d of mapFloorDecos) {
+    const px = d.tx*TILE, py = d.ty*TILE;
+    if (d.type === 0) {
+      // rachadura com ramificações
+      ctx.strokeStyle = 'rgba(0,0,0,0.4)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px+3,py+4); ctx.lineTo(px+7,py+9); ctx.lineTo(px+10,py+7); ctx.stroke();
+      ctx.strokeStyle = 'rgba(0,0,0,0.2)'; ctx.lineWidth = 0.5;
+      ctx.beginPath(); ctx.moveTo(px+7,py+9); ctx.lineTo(px+9,py+12); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(px+5,py+6); ctx.lineTo(px+3,py+9); ctx.stroke();
+    } else if (d.type === 1) {
+      // musgo — manchas orgânicas
+      ctx.fillStyle = 'rgba(35,70,18,0.55)';
+      ctx.fillRect(px+1,py+9,5,3); ctx.fillRect(px+7,py+8,5,4);
+      ctx.fillRect(px+3,py+11,4,2);
+      ctx.fillStyle = 'rgba(55,100,28,0.35)';
+      ctx.fillRect(px+2,py+8,3,1); ctx.fillRect(px+8,py+7,4,1);
+      ctx.fillRect(px+4,py+10,3,1);
+      // brilho do musgo
+      ctx.fillStyle = 'rgba(80,150,40,0.12)';
+      ctx.fillRect(px+2,py+10,2,1); ctx.fillRect(px+8,py+9,2,1);
+    } else {
+      // pedrinhas espalhadas
+      ctx.fillStyle = 'rgba(55,48,35,0.6)';
+      ctx.fillRect(px+3,py+10,3,2); ctx.fillRect(px+8,py+7,2,2);
+      ctx.fillRect(px+10,py+11,2,2); ctx.fillRect(px+5,py+13,2,1);
+      ctx.fillStyle = 'rgba(80,70,50,0.3)';
+      ctx.fillRect(px+3,py+9,3,1); ctx.fillRect(px+8,py+6,2,1);
+    }
+  }
+
+  // ── TILES DE PAREDE
+  for (let ty=0; ty<ROWS; ty++) {
+    for (let tx=0; tx<COLS; tx++) {
+      if (mapGrid[ty][tx] !== 1) continue;
+      const v = mapTileVariant[ty]?.[tx] ?? 0;
+      const X = tx*TILE, Y = ty*TILE, T = TILE;
+      const isBottom = mapGrid[ty+1]?.[tx] === 0;
+
+      if (isBottom) {
+        // face frontal — bloco de alvenaria com profundidade
+        ctx.fillStyle = '#1a1510'; ctx.fillRect(X, Y, T, T);
+        ctx.fillStyle = '#4a3e2e'; ctx.fillRect(X, Y, T-1, T-1);
+        ctx.fillStyle = '#564838'; ctx.fillRect(X+1, Y+1, T-3, T-3);
+        // divisor de bloco horizontal (alvenaria)
+        ctx.fillStyle = '#3a3025';
+        ctx.fillRect(X+1, Y + Math.floor(T*0.45), T-2, 1);
+        // highlight superior
+        ctx.fillStyle = 'rgba(255,240,200,0.12)';
+        ctx.fillRect(X+1, Y+1, T-3, 1);
+        ctx.fillRect(X+1, Y+1, 1, Math.floor(T*0.44));
+        // sombra lateral direita
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.fillRect(X+T-2, Y+1, 1, T-2);
+        // detalhe de textura
+        if (v % 3 === 0) {
+          ctx.fillStyle = 'rgba(30,22,14,0.4)';
+          ctx.fillRect(X+4, Y+3, 6, 2);
+        } else if (v % 3 === 1) {
+          ctx.fillStyle = 'rgba(255,240,180,0.06)';
+          ctx.fillRect(X+2, Y+9, 4, 1);
+          ctx.fillRect(X+9, Y+4, 5, 1);
+        }
+        // sombra projetada no chão
+        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.fillRect(X, (ty+1)*T, T, 3);
+        ctx.fillStyle = 'rgba(0,0,0,0.25)';
+        ctx.fillRect(X, (ty+1)*T+3, T, 2);
+      } else {
+        // topo da parede — mesmo visual do claro (alvenaria uniforme)
+        ctx.fillStyle = '#1a1510'; ctx.fillRect(X, Y, T, T);
+        ctx.fillStyle = '#4a3e2e'; ctx.fillRect(X, Y, T-1, T-1);
+        ctx.fillStyle = '#564838'; ctx.fillRect(X+1, Y+1, T-3, T-3);
+        ctx.fillStyle = '#3a3025';
+        ctx.fillRect(X+1, Y + Math.floor(T*0.45), T-2, 1);
+        ctx.fillStyle = 'rgba(255,240,200,0.12)';
+        ctx.fillRect(X+1, Y+1, T-3, 1);
+        ctx.fillRect(X+1, Y+1, 1, Math.floor(T*0.44));
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.fillRect(X+T-2, Y+1, 1, T-2);
+        if (v % 3 === 0) {
+          ctx.fillStyle = 'rgba(30,22,14,0.4)';
+          ctx.fillRect(X+4, Y+3, 6, 2);
+        } else if (v % 3 === 1) {
+          ctx.fillStyle = 'rgba(255,240,180,0.06)';
+          ctx.fillRect(X+2, Y+9, 4, 1);
+          ctx.fillRect(X+9, Y+4, 5, 1);
+        }
+      }
+    }
+  }
+
+  // ── TOCHAS (paredes com chão abaixo)
+  const tf = Math.floor(torchAnim / 100) % 4; // frame da chama 0-3
+  const flameColors = ['#ff9020','#ffb030','#ff6010','#ffcc40'];
+  const glowAlphas  = [0.22, 0.28, 0.18, 0.32];
+  for (const t of mapTorches) {
+    const px = t.tx*TILE, py = t.ty*TILE;
+    // glow grande no chão (iluminação)
+    const gx = px+TILE/2, gy = py+TILE+6;
+    const grad = ctx.createRadialGradient(gx,gy,1,gx,gy,22);
+    grad.addColorStop(0, `rgba(255,150,20,${glowAlphas[tf]})`);
+    grad.addColorStop(0.5, `rgba(255,100,0,${glowAlphas[tf]*0.4})`);
+    grad.addColorStop(1, 'rgba(255,80,0,0)');
+    ctx.fillStyle = grad; ctx.fillRect(px-14,py,TILE+28,32);
+    // suporte de metal (mais detalhado)
+    ctx.fillStyle = '#3a2508'; ctx.fillRect(px+6, py+8, 4, 7);   // haste
+    ctx.fillStyle = '#5a3a10'; ctx.fillRect(px+5, py+7, 6, 2);   // suporte
+    ctx.fillStyle = '#2a1804'; ctx.fillRect(px+7, py+13, 2, 1);  // base
+    // tigela da tocha
+    ctx.fillStyle = '#4a2e0a'; ctx.fillRect(px+4, py+5, 8, 3);
+    ctx.fillStyle = '#6a4010'; ctx.fillRect(px+5, py+5, 6, 2);
+    // brasa
+    ctx.fillStyle = '#cc3300'; ctx.fillRect(px+5, py+4, 6, 2);
+    ctx.fillStyle = '#ff5500'; ctx.fillRect(px+6, py+4, 4, 1);
+    // chama animada (3 camadas)
+    const fw = tf%2===0 ? 4 : 3;
+    const fh = 4 + (tf%3);
+    const fo = tf%2===0 ? 0 : 1;
+    ctx.fillStyle = '#aa2200'; ctx.fillRect(px+5+fo, py+2, fw+2, fh+2);
+    ctx.fillStyle = flameColors[tf]; ctx.fillRect(px+6+fo, py+1, fw, fh);
+    ctx.fillStyle = '#ffdd60'; ctx.fillRect(px+7, py+1, fw-2, fh-1);
+    ctx.fillStyle = '#fff8e0'; ctx.fillRect(px+7, py+1, 2, 2); // núcleo
+  }
+
+  // ── TEIAS DE ARANHA (cantos do mapa)
+  const corners = [
+    {x:0,y:0,sx:1,sy:1},{x:GAME_W,y:0,sx:-1,sy:1},
+    {x:0,y:GAME_H,sx:1,sy:-1},{x:GAME_W,y:GAME_H,sx:-1,sy:-1}
+  ];
+  ctx.save(); ctx.strokeStyle='rgba(200,200,200,0.12)'; ctx.lineWidth=0.5;
+  for (const co of corners) {
+    // fios radiais
+    const lines = [[0,28],[8,30],[16,25],[24,20],[28,10],[30,0]];
+    for (const [dx,dy] of lines) {
+      ctx.beginPath();
+      ctx.moveTo(co.x, co.y);
+      ctx.lineTo(co.x + dx*co.sx, co.y + dy*co.sy);
+      ctx.stroke();
+    }
+    // arcos concêntricos
+    for (const r of [10, 18, 26]) {
+      ctx.beginPath();
+      ctx.arc(co.x, co.y, r, co.sx>0 ? 0 : Math.PI, co.sy>0 ? Math.PI/2 : -Math.PI/2);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+
+  // ── SOMBRA DE BORDA (vinheta nas bordas do mapa)
+  const vw = GAME_W, vh = GAME_H, vs = 28;
+  const vTop = ctx.createLinearGradient(0,0,0,vs);
+  vTop.addColorStop(0,'rgba(0,0,0,0.55)'); vTop.addColorStop(1,'rgba(0,0,0,0)');
+  const vBot = ctx.createLinearGradient(0,vh-vs,0,vh);
+  vBot.addColorStop(0,'rgba(0,0,0,0)'); vBot.addColorStop(1,'rgba(0,0,0,0.55)');
+  const vLft = ctx.createLinearGradient(0,0,vs,0);
+  vLft.addColorStop(0,'rgba(0,0,0,0.55)'); vLft.addColorStop(1,'rgba(0,0,0,0)');
+  const vRgt = ctx.createLinearGradient(vw-vs,0,vw,0);
+  vRgt.addColorStop(0,'rgba(0,0,0,0)'); vRgt.addColorStop(1,'rgba(0,0,0,0.55)');
+  ctx.fillStyle=vTop; ctx.fillRect(0,0,vw,vs);
+  ctx.fillStyle=vBot; ctx.fillRect(0,vh-vs,vw,vs);
+  ctx.fillStyle=vLft; ctx.fillRect(0,0,vs,vh);
+  ctx.fillStyle=vRgt; ctx.fillRect(vw-vs,0,vs,vh);
 
   // Slash arc (ataque normal)
   if (player.attackAnim > 0 && player.class !== 'mage') {
@@ -1848,25 +2103,28 @@ function render() {
   // Shockwave do guerreiro
   if (player.shockwave) {
     const sw = player.shockwave;
-    const prog = sw.elapsed / sw.duration; // 0→1
-    const alpha = 1 - prog * 0.6;
+    const growing = sw.elapsed <= sw.growDuration;
+    const growProg = Math.min(1, sw.elapsed / sw.growDuration);
+    // linger: fade de 1→0 durante os 500ms após expansão
+    const lingerProg = growing ? 0 : (sw.elapsed - sw.growDuration) / sw.lingerDuration;
+    const alpha = growing ? (0.4 + growProg*0.6) : (1 - lingerProg*0.85);
     ctx.save();
     // anel principal
     ctx.beginPath();
     ctx.arc(sw.cx, sw.cy, sw.radius, 0, Math.PI*2);
     ctx.strokeStyle = `rgba(255,220,60,${alpha})`;
-    ctx.lineWidth = 5 - prog*3;
+    ctx.lineWidth = growing ? (2 + growProg*3) : (5 - lingerProg*3);
     ctx.stroke();
     // glow externo
     ctx.beginPath();
     ctx.arc(sw.cx, sw.cy, sw.radius, 0, Math.PI*2);
-    ctx.strokeStyle = `rgba(255,180,0,${alpha*0.4})`;
-    ctx.lineWidth = 12 - prog*8;
+    ctx.strokeStyle = `rgba(255,180,0,${alpha*0.45})`;
+    ctx.lineWidth = growing ? (8 + growProg*6) : (14 - lingerProg*10);
     ctx.stroke();
-    // área interna tênue
+    // área interna — azul pálido para stun
     ctx.beginPath();
     ctx.arc(sw.cx, sw.cy, sw.radius, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(255,200,50,${0.04 * (1-prog)})`;
+    ctx.fillStyle = `rgba(180,220,255,${0.06 * alpha})`;
     ctx.fill();
     ctx.restore();
   }
@@ -1951,9 +2209,22 @@ function render() {
 
   // Inimigos
   for (const e of enemies) {
+    // sombra elíptica no chão
+    ctx.save(); ctx.globalAlpha=0.25;
+    ctx.fillStyle='#000';
+    ctx.beginPath();
+    ctx.ellipse(e.x+e.w/2, e.y+e.h+1, e.w/2+1, 2.5, 0, 0, Math.PI*2);
+    ctx.fill(); ctx.restore();
     if (e.type === 'archer')     drawArcher(e.x, e.y, e.dir, e.animFrame, e.hitFlash);
     else if (e.type === 'enemyMage') drawEnemyMage(e.x, e.y, e.dir, e.animFrame, e.hitFlash);
     else drawChar(e.x, e.y, e.dir, e.animFrame, true, e.hitFlash);
+    // overlay de stun (brilho azul sobre o inimigo)
+    if (e.stunned > 0 && Math.floor(e.stunned/80)%2===0) {
+      ctx.save(); ctx.globalAlpha = 0.35;
+      ctx.fillStyle = '#80c8ff';
+      ctx.fillRect(e.x-1, e.y-1, e.w+2, e.h+2);
+      ctx.restore();
+    }
     const bw=8, bh=2, bx=Math.round(e.x-0.5), by=Math.round(e.y-3);
     const barColor = '#c22';
     ctx.fillStyle='#400'; ctx.fillRect(bx,by,bw,bh);
@@ -1962,6 +2233,12 @@ function render() {
 
   // Jogador
   if (player.invincible<=0 || Math.floor(player.invincible/80)%2===0) {
+    // sombra elíptica
+    ctx.save(); ctx.globalAlpha=0.3;
+    ctx.fillStyle='#000';
+    ctx.beginPath();
+    ctx.ellipse(player.x+player.w/2, player.y+player.h+1, player.w/2+1, 2.5, 0, 0, Math.PI*2);
+    ctx.fill(); ctx.restore();
     if (player.class === 'mage')
       drawMage(player.x, player.y, player.dir, player.animFrame, 0);
     else
