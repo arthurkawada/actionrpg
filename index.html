@@ -932,6 +932,16 @@ const ctx = canvas.getContext('2d');
 const GAME_W = 320, GAME_H = 240; // resolução interna do jogo (menor = mais nítido pixel art)
 canvas.width = GAME_W; canvas.height = GAME_H;
 
+// Gradientes de vinheta pré-criados (reutilizados a cada frame)
+const _vTop = ctx.createLinearGradient(0,0,0,28);
+_vTop.addColorStop(0,'rgba(0,0,0,0.55)'); _vTop.addColorStop(1,'rgba(0,0,0,0)');
+const _vBot = ctx.createLinearGradient(0,GAME_H-28,0,GAME_H);
+_vBot.addColorStop(0,'rgba(0,0,0,0)'); _vBot.addColorStop(1,'rgba(0,0,0,0.55)');
+const _vLft = ctx.createLinearGradient(0,0,28,0);
+_vLft.addColorStop(0,'rgba(0,0,0,0.55)'); _vLft.addColorStop(1,'rgba(0,0,0,0)');
+const _vRgt = ctx.createLinearGradient(GAME_W-28,0,GAME_W,0);
+_vRgt.addColorStop(0,'rgba(0,0,0,0)'); _vRgt.addColorStop(1,'rgba(0,0,0,0.55)');
+
 function resize() {
   const wrapper = document.getElementById('wrapper');
   const hud = document.getElementById('hud');
@@ -954,7 +964,9 @@ const TILE = 16;
 const COLS = Math.floor(GAME_W / TILE); // ~20
 const ROWS = Math.floor(GAME_H / TILE); // ~15
 
-let mapGrid = [], mapTileVariant = [], mapTorches = [], mapFloorDecos = [];
+// Valores constantes de tile pré-calculados
+const TILE_045 = Math.floor(TILE * 0.45); // = 7
+const TILE_044 = Math.floor(TILE * 0.44); // = 7
 let torchAnim = 0; // ms acumulado para animar tochas
 
 function generateMap() {
@@ -1275,7 +1287,7 @@ function getSpawnPos() {
     {x:20,y:20},{x:280,y:20},{x:20,y:200},{x:280,y:200},
     {x:150,y:20},{x:150,y:210},{x:20,y:110},{x:290,y:110},
   ];
-  const shuffled = preferred.sort(() => Math.random() - 0.5);
+  const shuffled = preferred.slice().sort(() => Math.random() - 0.5);
   for (const s of shuffled) {
     if (isFreeToSpawn(s.x, s.y, 7, 8)) return { x: s.x, y: s.y };
   }
@@ -1344,17 +1356,24 @@ function spawnEnemyMage() {
 // Alias para compatibilidade (usado no spawn inicial e nova onda)
 function spawnEnemy() { spawnWarrior(); }
 
+// Referências de DOM cacheadas para updateUI (evita getElementById a cada frame)
+const _elHpBar  = document.getElementById('hp-bar');
+const _elHpText = document.getElementById('hp-text');
+const _elScore  = document.getElementById('score');
+const _elWave   = document.getElementById('wave');
+const _elEcount = document.getElementById('ecount');
+
 function updateUI() {
   const pct = Math.max(0, player.hp / player.maxHp * 100);
-  document.getElementById('hp-bar').style.width = pct + '%';
-  document.getElementById('hp-bar').style.background = pct < 30 ? '#ff4040' : '#cc2020';
-  document.getElementById('hp-text').textContent = `${Math.max(0,player.hp)}/${player.maxHp}`;
-  document.getElementById('score').textContent = score;
-  document.getElementById('wave').textContent = wave;
+  _elHpBar.style.width = pct + '%';
+  _elHpBar.style.background = pct < 30 ? '#ff4040' : '#cc2020';
+  _elHpText.textContent = `${Math.max(0,player.hp)}/${player.maxHp}`;
+  _elScore.textContent = score;
+  _elWave.textContent = wave;
   if (boss) {
-    document.getElementById('ecount').textContent = '💀BOSS';
+    _elEcount.textContent = '💀BOSS';
   } else {
-    document.getElementById('ecount').textContent = enemies.length;
+    _elEcount.textContent = enemies.length;
   }
 }
 
@@ -2211,7 +2230,7 @@ function update(dt) {
 
   // ── Boss death particles
   if (bossDeathParticles.length > 0) {
-    bossDeathParticles.forEach(p => { p.x += p.vx; p.y += p.vy; p.life -= dt; p.vy += 0.02; });
+    for (const p of bossDeathParticles) { p.x += p.vx; p.y += p.vy; p.life -= dt; p.vy += 0.02; }
     bossDeathParticles = bossDeathParticles.filter(p => p.life > 0);
   }
 
@@ -2429,6 +2448,14 @@ function update(dt) {
   }
 }
 
+// Paletas de tiles (constantes — criadas uma vez)
+const _tilePalettes = [
+  ['#2a2218','#332a1e','#3a3025'],
+  ['#261e16','#2e2518','#35291c'],
+  ['#2c2318','#352a1c','#3c3022'],
+  ['#282015','#312719','#38281d'],
+];
+
 // ─── RENDER ──────────────────────────────────────────────────────────────────
 function render() {
   // Fundo
@@ -2441,14 +2468,7 @@ function render() {
       const v = mapTileVariant[ty]?.[tx] ?? 0;
       const X = tx*TILE, Y = ty*TILE, T = TILE;
 
-      // base do tile — variação de cor entre 4 tons de pedra escura
-      const palettes = [
-        ['#2a2218','#332a1e','#3a3025'],
-        ['#261e16','#2e2518','#35291c'],
-        ['#2c2318','#352a1c','#3c3022'],
-        ['#282015','#312719','#38281d'],
-      ];
-      const pal = palettes[v % 4];
+      const pal = _tilePalettes[v % 4];
       ctx.fillStyle = pal[0]; ctx.fillRect(X, Y, T, T);
 
       // bloco de pedra principal com chanfros
@@ -2528,11 +2548,11 @@ function render() {
         ctx.fillStyle = '#564838'; ctx.fillRect(X+1, Y+1, T-3, T-3);
         // divisor de bloco horizontal (alvenaria)
         ctx.fillStyle = '#3a3025';
-        ctx.fillRect(X+1, Y + Math.floor(T*0.45), T-2, 1);
+        ctx.fillRect(X+1, Y + TILE_045, T-2, 1);
         // highlight superior
         ctx.fillStyle = 'rgba(255,240,200,0.12)';
         ctx.fillRect(X+1, Y+1, T-3, 1);
-        ctx.fillRect(X+1, Y+1, 1, Math.floor(T*0.44));
+        ctx.fillRect(X+1, Y+1, 1, TILE_044);
         // sombra lateral direita
         ctx.fillStyle = 'rgba(0,0,0,0.3)';
         ctx.fillRect(X+T-2, Y+1, 1, T-2);
@@ -2556,10 +2576,10 @@ function render() {
         ctx.fillStyle = '#4a3e2e'; ctx.fillRect(X, Y, T-1, T-1);
         ctx.fillStyle = '#564838'; ctx.fillRect(X+1, Y+1, T-3, T-3);
         ctx.fillStyle = '#3a3025';
-        ctx.fillRect(X+1, Y + Math.floor(T*0.45), T-2, 1);
+        ctx.fillRect(X+1, Y + TILE_045, T-2, 1);
         ctx.fillStyle = 'rgba(255,240,200,0.12)';
         ctx.fillRect(X+1, Y+1, T-3, 1);
-        ctx.fillRect(X+1, Y+1, 1, Math.floor(T*0.44));
+        ctx.fillRect(X+1, Y+1, 1, TILE_044);
         ctx.fillStyle = 'rgba(0,0,0,0.3)';
         ctx.fillRect(X+T-2, Y+1, 1, T-2);
         if (v % 3 === 0) {
@@ -2631,20 +2651,11 @@ function render() {
   }
   ctx.restore();
 
-  // ── SOMBRA DE BORDA (vinheta nas bordas do mapa)
-  const vw = GAME_W, vh = GAME_H, vs = 28;
-  const vTop = ctx.createLinearGradient(0,0,0,vs);
-  vTop.addColorStop(0,'rgba(0,0,0,0.55)'); vTop.addColorStop(1,'rgba(0,0,0,0)');
-  const vBot = ctx.createLinearGradient(0,vh-vs,0,vh);
-  vBot.addColorStop(0,'rgba(0,0,0,0)'); vBot.addColorStop(1,'rgba(0,0,0,0.55)');
-  const vLft = ctx.createLinearGradient(0,0,vs,0);
-  vLft.addColorStop(0,'rgba(0,0,0,0.55)'); vLft.addColorStop(1,'rgba(0,0,0,0)');
-  const vRgt = ctx.createLinearGradient(vw-vs,0,vw,0);
-  vRgt.addColorStop(0,'rgba(0,0,0,0)'); vRgt.addColorStop(1,'rgba(0,0,0,0.55)');
-  ctx.fillStyle=vTop; ctx.fillRect(0,0,vw,vs);
-  ctx.fillStyle=vBot; ctx.fillRect(0,vh-vs,vw,vs);
-  ctx.fillStyle=vLft; ctx.fillRect(0,0,vs,vh);
-  ctx.fillStyle=vRgt; ctx.fillRect(vw-vs,0,vs,vh);
+  // ── SOMBRA DE BORDA (vinheta nas bordas do mapa) — gradientes pré-criados
+  ctx.fillStyle=_vTop; ctx.fillRect(0,0,GAME_W,28);
+  ctx.fillStyle=_vBot; ctx.fillRect(0,GAME_H-28,GAME_W,28);
+  ctx.fillStyle=_vLft; ctx.fillRect(0,0,28,GAME_H);
+  ctx.fillStyle=_vRgt; ctx.fillRect(GAME_W-28,0,28,GAME_H);
 
   // Slash arc (ataque normal)
   if (player.attackAnim > 0 && player.class !== 'mage') {
@@ -2865,11 +2876,13 @@ function render() {
   ctx.fillText(`ONDA ${wave}`, GAME_W/2-14, 8);
 }
 
+// Gradiente do game over (pré-criado)
+const _goGrad = ctx.createRadialGradient(GAME_W/2,GAME_H/2,10,GAME_W/2,GAME_H/2,180);
+_goGrad.addColorStop(0,'rgba(80,0,0,0.4)'); _goGrad.addColorStop(1,'rgba(0,0,0,0.9)');
+
 function renderGameOver() {
   ctx.fillStyle='#0a0a0f'; ctx.fillRect(0,0,GAME_W,GAME_H);
-  const grad = ctx.createRadialGradient(GAME_W/2,GAME_H/2,10,GAME_W/2,GAME_H/2,180);
-  grad.addColorStop(0,'rgba(80,0,0,0.4)'); grad.addColorStop(1,'rgba(0,0,0,0.9)');
-  ctx.fillStyle=grad; ctx.fillRect(0,0,GAME_W,GAME_H);
+  ctx.fillStyle=_goGrad; ctx.fillRect(0,0,GAME_W,GAME_H);
 
   ctx.textAlign='center';
   ctx.fillStyle='#cc2020'; ctx.font='bold 22px monospace';
@@ -2890,7 +2903,7 @@ function renderGameOver() {
     ctx.fillStyle='rgba(255,255,255,0.1)'; ctx.fillRect(bx,by,bw,bh);
     ctx.fillStyle='#cc4444'; ctx.fillRect(bx,by,bw*pct,bh);
   } else {
-    if (Math.floor(Date.now()/600)%2===0) {
+    if (Math.floor(gameOverTimer/600)%2===0) {
       ctx.fillStyle='#ccc'; ctx.font='8px monospace';
       ctx.fillText('Toque para voltar ao menu', GAME_W/2, GAME_H/2+24);
     }
